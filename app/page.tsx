@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import confetti from "canvas-confetti";
+import confetti from "canvas-confetti/dist/confetti.browser";
 
 export default function Home() {
   const [noPosition, setNoPosition] = useState({ top: 0, left: 0 });
@@ -15,7 +15,7 @@ export default function Home() {
 
     setNoPosition({ top: randomTop, left: randomLeft });
     setYesScale((prev) => prev + 0.25);
-    setNoScale((prev) => prev - 0.1);
+    setNoScale((prev) => (prev > 0.4 ? prev - 0.1 : 0.4));
   };
 
   const handleYes = () => {
@@ -33,13 +33,13 @@ export default function Home() {
       "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
     );
     audio.loop = true;
-    audio.volume = 0.3;
+    audio.volume = 0.2;
     audio.play().catch(() => {});
   }, []);
 
   if (accepted) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-red-600 to-pink-600 text-white text-center px-6">
+      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-rose-200 via-pink-300 to-red-400 text-red-900 text-center px-6">
         <h1 className="text-5xl font-bold animate-bounce mb-6">
           💖 That’s the right choice, Hanshu! 💖
         </h1>
@@ -51,14 +51,14 @@ export default function Home() {
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-black text-white">
+    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-gradient-to-br from-rose-100 via-pink-200 to-red-300 text-red-900">
 
-      {/* Heart Rain */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(40)].map((_, i) => (
+      {/* Soft Floating Hearts */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(35)].map((_, i) => (
           <div
             key={i}
-            className="absolute text-2xl animate-pulse opacity-60"
+            className="absolute text-2xl opacity-50 animate-pulse"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -77,7 +77,7 @@ export default function Home() {
         <button
           onClick={handleYes}
           style={{ transform: `scale(${yesScale})` }}
-          className="bg-red-500 hover:bg-red-600 px-8 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300"
+          className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300"
         >
           Yes 💖
         </button>
@@ -91,7 +91,7 @@ export default function Home() {
             left: noPosition.left,
             transform: `scale(${noScale})`,
           }}
-          className="bg-gray-800 px-8 py-4 rounded-full text-xl font-bold shadow-xl transition-all duration-200"
+          className="bg-gray-700 text-white px-8 py-4 rounded-full text-xl font-bold shadow-xl transition-all duration-200"
         >
           No 😢
         </button>
