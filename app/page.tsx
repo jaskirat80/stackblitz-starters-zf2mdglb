@@ -1,41 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import confetti from "canvas-confetti";
 
 export default function Home() {
   const [noPosition, setNoPosition] = useState({ top: 0, left: 0 });
   const [yesScale, setYesScale] = useState(1);
+  const [noScale, setNoScale] = useState(1);
   const [accepted, setAccepted] = useState(false);
 
   const moveNoButton = () => {
-    const randomTop = Math.random() * 300 - 150;
-    const randomLeft = Math.random() * 300 - 150;
+    const randomTop = Math.random() * 400 - 200;
+    const randomLeft = Math.random() * 400 - 200;
 
     setNoPosition({ top: randomTop, left: randomLeft });
-    setYesScale((prev) => prev + 0.2);
+    setYesScale((prev) => prev + 0.25);
+    setNoScale((prev) => prev - 0.1);
   };
+
+  const handleYes = () => {
+    setAccepted(true);
+
+    confetti({
+      particleCount: 200,
+      spread: 120,
+      origin: { y: 0.6 },
+    });
+  };
+
+  useEffect(() => {
+    const audio = new Audio(
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    );
+    audio.loop = true;
+    audio.volume = 0.3;
+    audio.play().catch(() => {});
+  }, []);
 
   if (accepted) {
     return (
-      <div className="flex items-center justify-center h-screen bg-red-500 text-white text-4xl font-bold animate-pulse">
-        ❤️ That’s the right choice ❤️
+      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-red-600 to-pink-600 text-white text-center px-6">
+        <h1 className="text-5xl font-bold animate-bounce mb-6">
+          💖 That’s the right choice, Hanshu! 💖
+        </h1>
+        <p className="text-xl opacity-90">
+          I knew bubzooo would say YES 😌❤️
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-gradient-to-br from-red-500 via-pink-500 to-red-700 text-white">
+    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-black text-white">
 
-      {/* Floating Hearts */}
+      {/* Heart Rain */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(40)].map((_, i) => (
           <div
             key={i}
-            className="absolute text-3xl animate-bounce opacity-40"
+            className="absolute text-2xl animate-pulse opacity-60"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              animationDuration: `${2 + Math.random() * 3}s`,
             }}
           >
             ❤️
@@ -43,15 +69,15 @@ export default function Home() {
         ))}
       </div>
 
-      <h1 className="text-4xl md:text-6xl font-bold mb-12 z-10 text-center">
-        Will you be my Valentine? ❤️
+      <h1 className="text-4xl md:text-6xl font-bold mb-12 z-10 text-center px-4">
+        Hanshu, will you be my Valentine? ❤️
       </h1>
 
       <div className="flex gap-8 z-10 relative">
         <button
-          onClick={() => setAccepted(true)}
+          onClick={handleYes}
           style={{ transform: `scale(${yesScale})` }}
-          className="bg-white text-red-600 px-8 py-4 rounded-full text-xl font-bold shadow-lg transition-all duration-300"
+          className="bg-red-500 hover:bg-red-600 px-8 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300"
         >
           Yes 💖
         </button>
@@ -63,8 +89,9 @@ export default function Home() {
             position: "relative",
             top: noPosition.top,
             left: noPosition.left,
+            transform: `scale(${noScale})`,
           }}
-          className="bg-black text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg transition-all duration-200"
+          className="bg-gray-800 px-8 py-4 rounded-full text-xl font-bold shadow-xl transition-all duration-200"
         >
           No 😢
         </button>
