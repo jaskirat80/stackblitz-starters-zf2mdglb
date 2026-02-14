@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import confetti from "canvas-confetti/dist/confetti.browser";
+import confetti from "canvas-confetti";
 
 export default function Home() {
   const [noPosition, setNoPosition] = useState({ top: 0, left: 0 });
